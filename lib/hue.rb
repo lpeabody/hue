@@ -6,4 +6,5 @@ require 'hue/light'
 
 module Hue
   USERNAME_RANGE = 10..40
+  USERNAME = '1234567890'
 end

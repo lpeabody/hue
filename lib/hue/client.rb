@@ -5,7 +5,7 @@ module Hue
   class Client
     attr_reader :username
 
-    def initialize(username = '1234567890')
+    def initialize(username = Hue::USERNAME)
       unless USERNAME_RANGE.include?(username.length)
         raise InvalidUsername, "Usernames must be between #{USERNAME_RANGE.first} and #{USERNAME_RANGE.last}."
       end

@@ -3,8 +3,9 @@ require 'thor'
 module Hue
   class Cli < Thor
     desc 'lights', 'Find all of the lights on your network'
+    option :user, :type => :string
     def lights
-      client.lights.each do |light|
+      client(options[:user]).lights.each do |light|
         puts light.id.to_s.ljust(6) + light.name
       end
     end
@@ -33,8 +34,6 @@ module Hue
       hue light 1 --alert lselect \n
       hue light 1 off
     LONGDESC
-    option :hue, :type => :numeric
-    option :sat, :type => :numeric
     option :bri, :type => :numeric
     option :alert, :type => :string
     def light(id, state = nil)
@@ -48,8 +47,8 @@ module Hue
 
   private
 
-    def client
-      @client ||= Hue::Client.new
+    def client(username = Hue::USERNAME)
+      @client ||= Hue::Client.new username
     end
   end
 end
