@@ -1,27 +1,27 @@
-require 'thor'
-
 module Hue
-  class Cli < Thor
+  class Cli < CliBase
+    shared_options
     desc 'lights', 'Find all of the lights on your network'
-    option :user, :type => :string
     def lights
       client(options[:user]).lights.each do |light|
         puts light.id.to_s.ljust(6) + light.name
       end
     end
 
+    shared_options
     desc 'add LIGHTS', 'Search for new lights'
     def add(thing)
       case thing
       when 'lights'
-        client.add_lights
+        client(options[:user]).add_lights
       end
     end
 
+    shared_options
     desc 'all STATE', 'Send commands to all lights'
     def all(state)
       on = state == 'on'
-      client.lights.each do |light|
+      client(options[:user]).lights.each do |light|
         light.on = on
       end
     end
@@ -34,13 +34,18 @@ module Hue
       hue light 1 --alert lselect \n
       hue light 1 off
     LONGDESC
-    option :bri, :type => :numeric
-    option :alert, :type => :string
+    shared_options
+    method_option :hue, :type => :numeric
+    method_option :sat, :type => :numeric
+    method_option :bri, :type => :numeric
+    method_option :alert, :type => :string
     def light(id, state = nil)
-      light = client.light(id)
+      light = client(options[:user]).light(id)
       puts light.name
 
       body = options.dup
+      # We no longer need :user so remove it.
+      body.delete(:user)
       body[:on] = (state == 'on' || !(state == 'off'))
       puts light.set_state(body) if body.length > 0
     end
