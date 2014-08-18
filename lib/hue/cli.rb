@@ -39,6 +39,8 @@ module Hue
     method_option :sat, :type => :numeric
     method_option :bri, :type => :numeric
     method_option :alert, :type => :string
+    method_option :effect, :type => :string
+    method_option :transitiontime, :type => :numeric
     def light(id, state = nil)
       light = client(options[:user]).light(id)
       puts light.name
