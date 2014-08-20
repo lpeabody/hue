@@ -1,15 +1,15 @@
 module Hue
   class Cli < CliBase
-    shared_options
     desc 'lights', 'Find all of the lights on your network'
+    shared_options
     def lights
       client(options[:user]).lights.each do |light|
         puts light.id.to_s.ljust(6) + light.name
       end
     end
 
-    shared_options
     desc 'add LIGHTS', 'Search for new lights'
+    shared_options
     def add(thing)
       case thing
       when 'lights'
@@ -17,8 +17,8 @@ module Hue
       end
     end
 
-    shared_options
     desc 'all STATE', 'Send commands to all lights'
+    shared_options
     def all(state)
       on = state == 'on'
       client(options[:user]).lights.each do |light|
